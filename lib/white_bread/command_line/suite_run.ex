@@ -17,7 +17,7 @@ defmodule WhiteBread.CommandLine.SuiteRun do
       |> Enum.flat_map(fn results -> results.failures end)
   end
 
-  defp run_suite(%Suite{} = suite, context_path: context_path) do
+  def run_suite(%Suite{} = suite, context_path: context_path) do
     WhiteBread.Outputer.report({:suite, suite.name})
     ContextLoader.ensure_context(suite.context, context_path)
     WhiteBread.run(
@@ -29,7 +29,7 @@ defmodule WhiteBread.CommandLine.SuiteRun do
     )
   end
 
-  defp get_suites_from_config(path, options) do
+  def get_suites_from_config(path, options) do
     IO.puts "loading config from #{path}"
 
     if (suite_config_missing?(path)), do: create_config(path)
@@ -62,7 +62,7 @@ defmodule WhiteBread.CommandLine.SuiteRun do
     |> Stream.filter(fn suite -> suite.name == requested_suite end)
   end
 
-  defp add_outputers do
+  def add_outputers do
     true = Enum.all?(outputers(), &Code.ensure_loaded?/1)
     for o <- outputers() do
       WhiteBread.EventManager.add_handler(o, [])
